@@ -1,7 +1,7 @@
 package meow.starlight.metadata.definitions.xml;
 
 import lombok.*;
-import meow.starlight.metadata.definitions.xml.mets.MetsHdr;
+import meow.starlight.metadata.definitions.xml.mets.*;
 
 import javax.xml.bind.annotation.*;
 
@@ -26,11 +26,17 @@ public class XMLMETS {
     @XmlAttribute(name = "xmlns:mets")
     private String metsSchemaLocation = "http://www.loc.gov/METS/";
 
-    //TODO: set up definitions for the header, dmdsec and amdsec.
 
     @XmlElement(name = "mets:metsHdr")
     private MetsHdr metsHdr;
-
+    @XmlElement(name = "mets:dmdSec")
+    private DmdSec dmdSec;
+    @XmlElement(name = "mets:amdSec")
+    private AmdSec amdSec;
+    @XmlElement(name = "mets:fileSec")
+    private FileSec fileSec;
+    @XmlElement(name = "mets:structMap")
+    private StructMap structMap;
 
 
     //@XmlElement(name = "mix:mix")
