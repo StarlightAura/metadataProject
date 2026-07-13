@@ -1,7 +1,8 @@
-package meow.starlight.metadata.definitions.xml.mets.mdWrap;
+package meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlData;
 
 import lombok.*;
 import lombok.experimental.*;
+import meow.starlight.metadata.definitions.xml.mets.mdWrap.XMLData;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlDataTypes.MARCRecord;
 
 import javax.xml.bind.annotation.XmlAccessType;

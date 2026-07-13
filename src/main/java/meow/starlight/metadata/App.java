@@ -5,15 +5,13 @@ package meow.starlight.metadata;
 import com.thebuzzmedia.exiftool.ExifTool;
 import com.thebuzzmedia.exiftool.ExifToolBuilder;
 import meow.starlight.metadata.definitions.xml.XMLMETS;
-import meow.starlight.metadata.definitions.xml.XMLMIX;
 import meow.starlight.metadata.definitions.xml.mets.DmdSec;
 import meow.starlight.metadata.definitions.xml.mets.MDWrap;
 import meow.starlight.metadata.definitions.xml.mets.MetsHdr;
 import meow.starlight.metadata.definitions.xml.mets.hdr.MetsAgent;
 import meow.starlight.metadata.definitions.xml.mets.marcxml.Controlfield;
 import meow.starlight.metadata.definitions.xml.mets.marcxml.Datafield;
-import meow.starlight.metadata.definitions.xml.mets.mdWrap.MARCXMLData;
-import meow.starlight.metadata.definitions.xml.mets.mdWrap.XMLData;
+import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlData.MARCXMLData;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlDataTypes.MARCRecord;
 
 import javax.xml.bind.JAXBContext;
