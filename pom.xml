@@ -29,12 +29,16 @@
             <version>1.18.46</version>
             <scope>compile</scope>
         </dependency>
+
         <!-- MaterialFX for JavaFX -->
+        <!-- Source: https://mvnrepository.com/artifact/io.github.palexdev/materialfx -->
         <dependency>
             <groupId>io.github.palexdev</groupId>
             <artifactId>materialfx</artifactId>
             <version>11.17.0</version>
+            <scope>compile</scope>
         </dependency>
+
         <!-- Source: https://mvnrepository.com/artifact/com.github.mjeanroy/exiftool-lib -->
         <dependency>
             <groupId>com.github.mjeanroy</groupId>
