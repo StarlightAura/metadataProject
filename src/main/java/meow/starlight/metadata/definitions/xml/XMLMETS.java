@@ -2,6 +2,7 @@ package meow.starlight.metadata.definitions.xml;
 
 import lombok.*;
 import meow.starlight.metadata.definitions.xml.mets.*;
+import meow.starlight.metadata.definitions.xml.mets.structSec.StructMap;
 
 import javax.xml.bind.annotation.*;
 
@@ -35,11 +36,8 @@ public class XMLMETS {
     private AmdSec amdSec;
     @XmlElement(name = "mets:fileSec")
     private FileSec fileSec;
-    @XmlElement(name = "mets:structMap")
-    private StructMap structMap;
+    @XmlElement(name = "mets:structSec")
+    private StructSec structSec;
 
-
-    //@XmlElement(name = "mix:mix")
-    //private XMLMIX xmlmix;
 
 }

@@ -1,3 +1,4 @@
+
 package meow.starlight.metadata.definitions.xml.mets.mdWrap;
 
 import lombok.*;
@@ -5,9 +6,7 @@ import lombok.experimental.*;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlData.MARCXMLData;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlData.MIXXMLData;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.*;
 
 @Data
 @NoArgsConstructor
@@ -15,7 +14,8 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @EqualsAndHashCode
 @SuperBuilder(toBuilder = true)
 
-@XmlAccessorType( XmlAccessType.FIELD )
+//@XmlAccessorType( XmlAccessType.FIELD )
 @XmlSeeAlso({MARCXMLData.class, MIXXMLData.class})
+
 public class XMLData {
 }

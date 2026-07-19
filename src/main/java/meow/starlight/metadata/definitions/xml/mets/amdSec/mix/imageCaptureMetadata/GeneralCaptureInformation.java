@@ -1,7 +1,6 @@
-package meow.starlight.metadata.definitions.xml.mets;
+package meow.starlight.metadata.definitions.xml.mets.amdSec.mix.imageCaptureMetadata;
 
 import lombok.*;
-import meow.starlight.metadata.definitions.xml.mets.fileSec.FileGrp;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -15,12 +14,8 @@ import javax.xml.bind.annotation.XmlElement;
 @Builder
 
 @XmlAccessorType( XmlAccessType.FIELD )
-public class FileSec {
+public class GeneralCaptureInformation {
 
-    @XmlElement(name = "mets:fileGrp")
-    private FileGrp fileGrpJPG;
-
-    @XmlElement(name = "mets:fileGrp")
-    private FileGrp fileGrpTIF;
-
+    @XmlElement(name = "mix:dateTimeCreated")
+    private String dateTimeCreated;
 }

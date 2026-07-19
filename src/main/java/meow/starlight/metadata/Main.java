@@ -2,8 +2,10 @@ package meow.starlight.metadata;
 
 //jesus fucking christ just kill me already
 
-import com.thebuzzmedia.exiftool.ExifTool;
-import com.thebuzzmedia.exiftool.ExifToolBuilder;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import meow.starlight.metadata.definitions.xml.XMLMETS;
 import meow.starlight.metadata.definitions.xml.mets.DmdSec;
 import meow.starlight.metadata.definitions.xml.mets.MDWrap;
@@ -11,59 +13,54 @@ import meow.starlight.metadata.definitions.xml.mets.MetsHdr;
 import meow.starlight.metadata.definitions.xml.mets.hdr.MetsAgent;
 import meow.starlight.metadata.definitions.xml.mets.marcxml.Controlfield;
 import meow.starlight.metadata.definitions.xml.mets.marcxml.Datafield;
+import meow.starlight.metadata.definitions.xml.mets.mdWrap.XMLData;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlData.MARCXMLData;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlDataTypes.MARCRecord;
+import meow.starlight.metadata.parser.Parser;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
+
+import javafx.application.Application;
 
 
 
-public class App {
+public class Main extends Application {
 
     public static final String EXIFJSON = "-j";
+
+
     public static void main(String[] args) {
 
+        launch(args);
         try {
+            exifTool();
             mets();
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
-
-
     }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("App.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Starlight Metadata");
+        primaryStage.show();
+    }
+
+
 
     public static void exifTool() {
         String p = "/home/aura/work/project2/J_AHAJSE_AB5220_003";
-
-        ExifTool exifTool = new ExifToolBuilder().withPath("/home/aura/IDEAProjects/metadataProject/src/main/resources/lib/exiftool/exiftool").build();
-
-
-        try (Stream<Path> paths = Files.walk( Paths.get( p ) )) {
-            paths.filter(Files::isRegularFile)
-                    .forEach(t -> {
-                        try (FileWriter fw = new FileWriter( t.getFileName().toString() + ".txt" )){
-                            List<String> ar = new ArrayList<>();
-                            ar.add(EXIFJSON);
-                            ar.add(String.valueOf(t));
-                            System.out.println(exifTool.getImageMeta(t.toFile()).toString());
-                            fw.write(exifTool.getRawExifToolOutput(ar));
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Parser parser = Parser.builder().build();
+        parser.parseImages(p);
     }
 
     public static void mets() throws JAXBException {
@@ -86,7 +83,7 @@ public class App {
                 .controlfield(Controlfield.builder().tag("002").value("Controlfield").build())
                 .datafield(Datafield.builder().tag("040").ind2(" ").ind1(" ").build())
                 .build();
-        MARCXMLData marcXMLData = MARCXMLData.builder().record(marcRecord).build();
+        XMLData marcXMLData = MARCXMLData.builder().record(marcRecord).build();
 
         MDWrap mdWrap = MDWrap.builder().mdType("MARC").XMLData(marcXMLData).build();
 
@@ -113,4 +110,6 @@ public class App {
             throw new RuntimeException(e);
         }
     }
+
+
 }
