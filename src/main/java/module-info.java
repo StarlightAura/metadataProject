@@ -3,8 +3,10 @@ module metadataProject {
     requires java.desktop;
     requires java.xml.bind;
     requires javafx.fxml;
-    requires javafx.graphics;
+    requires javafx.controls;
     requires static lombok;
 
-    opens meow.starlight.metadata;
+    opens meow.starlight.metadata to javafx.fxml;
+    exports meow.starlight.metadata.ui;
+    exports meow.starlight.metadata;
 }

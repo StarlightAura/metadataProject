@@ -30,26 +30,23 @@ import javafx.application.Application;
 
 public class Main extends Application {
 
-    public static final String EXIFJSON = "-j";
-
-
     public static void main(String[] args) {
 
         launch(args);
-        try {
+        /*try {
             exifTool();
             mets();
         } catch (JAXBException e) {
             throw new RuntimeException(e);
-        }
+        }*/
+        System.out.println("Hello World!");
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("App.fxml"));
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("App.fxml"));
+        Scene scene = new Scene(loader.load(), 800, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Starlight Metadata");
         primaryStage.show();
