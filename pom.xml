@@ -38,10 +38,12 @@
             <version>11.17.0</version>
             <scope>compile</scope>
         </dependency>
+        <!-- Source: https://mvnrepository.com/artifact/com.opencsv/opencsv -->
         <dependency>
-            <groupId>org.burningwave</groupId>
-            <artifactId>core</artifactId>
-            <version>12.66.2</version>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.12.0</version>
+            <scope>compile</scope>
         </dependency>
 
 
@@ -77,9 +79,9 @@
             <version>23</version>
         </dependency>
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>23</version>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>11.2.1</version>
         </dependency>
     </dependencies>
 

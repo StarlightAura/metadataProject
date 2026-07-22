@@ -3,7 +3,6 @@ package meow.starlight.metadata;
 //jesus fucking christ just kill me already
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import meow.starlight.metadata.definitions.xml.XMLMETS;
@@ -28,11 +27,20 @@ import javafx.application.Application;
 
 
 
-public class Main extends Application {
+public class Main {
 
+
+    /// two args. first is the repository directory.
+    /// second one is the .csv file.
+    /// i'd pray for god to help me.
+    /// but there is no god.
     public static void main(String[] args) {
 
-        launch(args);
+        //exifTool();
+
+        System.out.println(MARCRecord.builder().build());
+
+        //launch(args);
         /*try {
             exifTool();
             mets();
@@ -40,8 +48,10 @@ public class Main extends Application {
             throw new RuntimeException(e);
         }*/
         System.out.println("Hello World!");
+
     }
 
+    /*
     @Override
     public void start(Stage primaryStage) throws IOException {
 
@@ -51,13 +61,13 @@ public class Main extends Application {
         primaryStage.setTitle("Starlight Metadata");
         primaryStage.show();
     }
+    */
 
 
-
-    public static void exifTool() {
-        String p = "/home/aura/work/project2/J_AHAJSE_AB5220_003";
+    public static void parse(String[] args) {
         Parser parser = Parser.builder().build();
-        parser.parseImages(p);
+        parser.parseImageMetadata(args[0]);
+        parser.parseAccessData(args[1]);
     }
 
     public static void mets() throws JAXBException {
@@ -74,7 +84,7 @@ public class Main extends Application {
 
         DmdSec dmdSec = new DmdSec();
 
-        MARCRecord marcRecord = MARCRecord.builder().leader("00000cam a22000005i 4500").controlfield(
+        MARCRecord marcRecord = MARCRecord.builder().controlfield(
                 Controlfield.builder().tag("001").value("Controlfield").build()
         )
                 .controlfield(Controlfield.builder().tag("002").value("Controlfield").build())

@@ -30,7 +30,4 @@ public class MetsHdr {
     @XmlElement(name = "mets:agent")
     private MetsAgent agent;
 
-    @XmlElement(name = "mets:agent")
-    private MetsAgent agent2;
-
 }

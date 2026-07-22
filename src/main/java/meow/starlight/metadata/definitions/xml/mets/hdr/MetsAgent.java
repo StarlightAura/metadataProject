@@ -25,7 +25,4 @@ public class MetsAgent {
 
     @XmlElement(name = "mets:name")
     private String name = "Archivo Histórico de la Armada Juan Sebastián de Elcano";
-
-    @XmlElement(name = "mets:note")
-    private String note = null;
 }

@@ -22,7 +22,7 @@ import java.util.List;
 public class MARCRecord {
 
     @XmlElement(name = "marc:leader")
-    private String leader;
+    private final String leader = "00000nmc a2200000 u 4500";
 
     @XmlElement(name = "marc:controlfield")
     @Singular
