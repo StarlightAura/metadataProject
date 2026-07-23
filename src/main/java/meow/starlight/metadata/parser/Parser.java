@@ -33,6 +33,7 @@ public class Parser {
     private static final String EXIFJSON = "-j";
 
 
+
     /*
     public void parseImageMetadata(String path){
         try (Stream<Path> paths = Files.walk( Paths.get( path ) )) {
@@ -95,6 +96,8 @@ public class Parser {
         records.forEach(System.out::println);
          */
 
+
+        /// todo: change this to use newAccessData
         List<AccessData> accessRecords = new ArrayList<>();
         try(CSVReader csvReader = new CSVReader(new FileReader(path));){
             while(csvReader.readNext() != null){
@@ -130,6 +133,24 @@ public class Parser {
         System.out.println(accessRecords);
 
     }
+
+    //we're gonna have to make some asumptions bc otherwise this project won't ever end.
+    //repository containing directories "signatures" containing folders with tiff, jpegs and pdf
+    //the mets file will be generated on the directory, alongside the image folders.
+
+    public static List<String> listDirectories(File[] files){
+        List<String> directories = new ArrayList<>();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                System.out.println("Directory: " + file.getAbsolutePath());
+                System.out.println("Directory name: " + file.getName());
+
+                directories.add(file.getAbsolutePath());
+            }
+        }
+        return directories;
+    }
+
 
 
 }

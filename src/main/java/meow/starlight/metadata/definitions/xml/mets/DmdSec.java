@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlElement;
 public class DmdSec {
 
     @XmlAttribute(name = "ID")
-    private String id = "DMD1";
+    final private String id = "DMD1";
 
     @XmlElement(name = "mets:mdWrap")
     private MDWrap mdWrap;

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class FLocat {
 
     @XmlAttribute(name = "LOCTYPE")
-    private String loctype = "OTHER";
+    final private String loctype = "OTHER";
 
     @XmlAttribute(name = "xlink:href")
     private String href;

@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlElement;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 @EqualsAndHashCode
 @Builder
@@ -17,11 +16,11 @@ import javax.xml.bind.annotation.XmlElement;
 public class RightsHolderContact {
 
     @XmlElement(name = "rts:RightsHolderDesignation")
-    private String rightsHolderDesignation = "Ministerio de Defensa – Archivo Histórico de la Armada";
+    final private String rightsHolderDesignation = "Ministerio de Defensa – Archivo Histórico de la Armada";
 
     @XmlElement(name = "rts:RightsHolderContactAddress")
-    private String rightsHolderContactAddress = "C/ Sanchidrián nº 9, 28024. Madrid";
+    final private String rightsHolderContactAddress = "C/ Sanchidrián nº 9, 28024. Madrid";
 
     @XmlElement(name = "rts:RightsHolderContactPhone")
-    private String rightsHolderContactPhone = "+34 913059519";
+    final private String rightsHolderContactPhone = "+34 913059519";
 }

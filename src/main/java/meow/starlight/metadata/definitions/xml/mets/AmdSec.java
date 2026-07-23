@@ -22,7 +22,7 @@ import java.util.List;
 public class AmdSec {
 
     @XmlAttribute(name = "ID")
-    private String id = "AMD1";
+    final private String id = "AMD1";
 
     @XmlElement(name = "mets:techMD")
     @Singular

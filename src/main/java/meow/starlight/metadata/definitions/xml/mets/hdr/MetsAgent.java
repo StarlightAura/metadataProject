@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlElement;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 @EqualsAndHashCode
 @Builder
@@ -18,11 +17,11 @@ import javax.xml.bind.annotation.XmlElement;
 public class MetsAgent {
 
     @XmlAttribute(name = "TYPE")
-    private String type = "ORGANIZATION";
+    final private String type = "ORGANIZATION";
 
     @XmlAttribute(name = "ROLE")
-    private String creator = "CREATOR";
+    final private String creator = "CREATOR";
 
     @XmlElement(name = "mets:name")
-    private String name = "Archivo Histórico de la Armada Juan Sebastián de Elcano";
+    final private String name = "Archivo Histórico de la Armada Juan Sebastián de Elcano";
 }

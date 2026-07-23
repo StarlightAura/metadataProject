@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlElement;
 public class METSPage {
 
     @XmlAttribute(name = "TYPE")
-    private String type = "PAGE";
+    final private String type = "PAGE";
 
     @XmlAttribute(name = "ORDER")
     private String order; /// this should be the same as filegrp groupid

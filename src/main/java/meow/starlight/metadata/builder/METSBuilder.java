@@ -9,6 +9,8 @@ import meow.starlight.metadata.definitions.xml.mets.amdSec.TechMD;
 import meow.starlight.metadata.definitions.xml.mets.amdSec.mix.BasicDigitalObjectInformation;
 import meow.starlight.metadata.definitions.xml.mets.amdSec.mix.BasicImageInformation;
 import meow.starlight.metadata.definitions.xml.mets.amdSec.mix.basicDigitalObjectInformation.ObjectIdentifier;
+import meow.starlight.metadata.definitions.xml.mets.amdSec.rights.RightsHolder;
+import meow.starlight.metadata.definitions.xml.mets.amdSec.rights.rightsholder.RightsHolderContact;
 import meow.starlight.metadata.definitions.xml.mets.hdr.MetsAgent;
 import meow.starlight.metadata.definitions.xml.mets.marcxml.Controlfield;
 import meow.starlight.metadata.definitions.xml.mets.marcxml.Datafield;
@@ -16,8 +18,10 @@ import meow.starlight.metadata.definitions.xml.mets.marcxml.Subfield;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.XMLData;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlData.MARCXMLData;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlData.MIXXMLData;
+import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlData.RIGHTSXMLData;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlDataTypes.MARCRecord;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlDataTypes.XMLMIX;
+import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlDataTypes.XMLRights;
 import meow.starlight.metadata.parser.MIX;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -105,14 +109,31 @@ public class METSBuilder {
                         .builder()
                         .objectIdentifier(ObjectIdentifier
                                 .builder()
-                                .mixObjectIdentifierType("pathname")
-                                .mixObjectIdentifierValue("") //here goes the relative path to the .mets file. i'll do it tomorrow. i'm tired.
+                                .mixObjectIdentifierValue("") // todo: here goes the relative path to the .mets file. i'll do it tomorrow. i'm tired.
                                 .build())
                         .build())
                 .build();
     }
 
+    ///////////////////////////////////
+
+
+
+    ///////////////////////////////////
+
     public static RightsMD createRightsMD(String id, MDWrap mdwrap){
         return RightsMD.builder().id(id).mdWrap(mdwrap).build();
+    }
+
+    public static RIGHTSXMLData createRIGHTSXMLData(XMLRights xmlrights){
+        return RIGHTSXMLData.builder().rights(xmlrights).build();
+    }
+
+    public static XMLRights createXMLRights(RightsHolder rightsHolder){
+        return XMLRights.builder().rightsHolder(rightsHolder).build();
+    }
+
+    public static RightsHolder createRightsHolder(){
+        return RightsHolder.builder().build();
     }
 }

@@ -20,10 +20,10 @@ import javax.xml.bind.annotation.*;
 public class XMLMIX {
 
     @XmlAttribute(name = "xsi:schemaLocation")
-    String attr1 = "http://www.loc.gov/mix/v20 http://www.loc.gov/standards/mix/mix20/mix20.xsd";
+    final private String attr1 = "http://www.loc.gov/mix/v20 http://www.loc.gov/standards/mix/mix20/mix20.xsd";
 
     @XmlAttribute(name = "xmlns:mix")
-    String attr2 = "http://www.loc.gov/mix/v20";
+    final private String attr2 = "http://www.loc.gov/mix/v20";
 
     @XmlElement(name = "mix:BasicDigitalObjectInformation")
     private BasicDigitalObjectInformation basicDigitalObjectInformation;

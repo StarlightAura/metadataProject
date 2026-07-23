@@ -25,7 +25,7 @@ public class MetsHdr {
     private String createDate = OffsetDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
     @XmlAttribute(name = "RECORDSTATUS")
-    private String recordStatus = "Complete";
+    final private String recordStatus = "Complete";
 
     @XmlElement(name = "mets:agent")
     private MetsAgent agent;

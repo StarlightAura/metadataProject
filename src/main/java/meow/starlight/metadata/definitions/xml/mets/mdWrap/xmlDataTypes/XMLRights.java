@@ -21,10 +21,10 @@ import javax.xml.bind.annotation.XmlElement;
 public class XMLRights{
 
     @XmlAttribute(name = "RIGHTSCATEGORY")
-    private String rightsCategory = "PUBLIC DOMAIN";
+    final private String rightsCategory = "PUBLIC DOMAIN";
 
     @XmlElement(name = "rts:RightsDeclaration")
-    private String rightsDeclaration = "Dominio público. Puede reutilizarse libremente, respetando la integridad de la obra y citando la procedencia: Archivo Histórico de la Armada – Ministerio de Defensa.";
+    final private String rightsDeclaration = "Dominio público. Puede reutilizarse libremente, respetando la integridad de la obra y citando la procedencia: Archivo Histórico de la Armada – Ministerio de Defensa.";
 
     @XmlElement(name = "rts:RightsHolder")
     private RightsHolder rightsHolder;

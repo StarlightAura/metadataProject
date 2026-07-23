@@ -19,13 +19,13 @@ import javax.xml.bind.annotation.*;
 public class XMLMETS {
 
     @XmlAttribute(name = "xmlns:xlink")
-    private String xlink = "http://www.w3.org/1999/xlink";
+    final private String xlink = "http://www.w3.org/1999/xlink";
     @XmlAttribute(name = "xmlns:xsi")
-    private String xsi = "http://www.w3.org/2001/XMLSchema-instance";
+    final private String xsi = "http://www.w3.org/2001/XMLSchema-instance";
     @XmlAttribute(name = "xsi:schemaLocation")
-    private String xsiSchemaLocation = "http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd";
+    final private String xsiSchemaLocation = "http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd";
     @XmlAttribute(name = "xmlns:mets")
-    private String metsSchemaLocation = "http://www.loc.gov/METS/";
+    final private String metsSchemaLocation = "http://www.loc.gov/METS/";
 
 
     @XmlElement(name = "mets:metsHdr")

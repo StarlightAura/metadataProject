@@ -19,7 +19,7 @@ import java.util.List;
 public class METSVolume {
 
     @XmlAttribute(name = "TYPE")
-    private String type = "VOLUME";
+    final private String type = "VOLUME";
 
     @XmlElement(name = "mets:div")
     private List<METSPage> metsPage;

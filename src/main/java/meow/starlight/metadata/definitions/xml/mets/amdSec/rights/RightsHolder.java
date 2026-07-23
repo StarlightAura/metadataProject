@@ -10,7 +10,6 @@ import javax.xml.bind.annotation.XmlElement;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 @EqualsAndHashCode
 @Builder
@@ -19,8 +18,8 @@ import javax.xml.bind.annotation.XmlElement;
 public class RightsHolder {
 
     @XmlElement(name = "rts:RightsHolderName")
-    private String rtsRightsHolder = "Ministerio de Defensa – Archivo Histórico de la Armada";
+    final private String RightsHolder = "Ministerio de Defensa – Archivo Histórico de la Armada";
 
     @XmlElement(name = "rts:RightsHolderContact")
-    private RightsHolderContact rtsRightsHolderContact;
+    final private RightsHolderContact rightsHolderContact = RightsHolderContact.builder().build();
 }

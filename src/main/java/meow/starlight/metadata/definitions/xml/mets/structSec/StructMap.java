@@ -19,7 +19,7 @@ import java.util.List;
 public class StructMap {
 
     @XmlAttribute(name = "TYPE")
-    private String type = "PHYSICAL";
+    final private String type = "PHYSICAL";
 
     @XmlElement(name = "mets:div")
     private METSVolume metsVolume;
