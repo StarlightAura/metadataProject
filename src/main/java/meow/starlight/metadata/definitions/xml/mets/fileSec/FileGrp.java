@@ -21,6 +21,9 @@ public class FileGrp {
     @XmlAttribute(name = "ID")
     private String id;
 
+    @XmlAttribute(name = "USE")
+    private String use;
+
     @XmlElement(name = "mets:file")
     private List<METSFile> files;
 }

@@ -17,6 +17,6 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlAccessorType( XmlAccessType.FIELD )
 public class FormatDesignation {
 
-    @XmlElement(name = "mis:formatName")
+    @XmlElement(name = "mix:formatName")
     private String formatName;
 }

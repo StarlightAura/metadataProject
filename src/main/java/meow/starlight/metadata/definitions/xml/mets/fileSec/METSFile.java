@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlAccessorType( XmlAccessType.FIELD )
 public class METSFile {
 
-    @XmlAttribute(name = "MDID") //TODO: LINK TO AMDSEC
+    @XmlAttribute(name = "MDID")
     private String amdid;
 
     @XmlAttribute(name = "ID")
@@ -27,7 +27,7 @@ public class METSFile {
     private String mimeType;
 
     @XmlAttribute(name = "SIZE")
-    private Integer size;
+    private long size;
 
     @XmlElement(name = "mets:FLocat")
     private FLocat fLocat;

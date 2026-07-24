@@ -19,8 +19,7 @@ import javax.xml.bind.annotation.XmlElement;
 public class RightsMD {
 
     @XmlAttribute(name = "ID")
-    private String id; //TODO: make this attribute get its ID at runtime from the file
-    //"RMD_MIX_" + id
+    private String id;
 
     @XmlElement(name = "mets:mdWrap")
     private MDWrap mdWrap;

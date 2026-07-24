@@ -7,9 +7,12 @@ module metadataProject {
     requires static lombok;
     requires com.opencsv;
     requires MaterialFX;
+    requires com.google.gson;
+    requires com.google.common;
 
     opens meow.starlight.metadata to javafx.fxml;
     opens meow.starlight.metadata.ui to javafx.fxml;
+    opens meow.starlight.metadata.definitions.xml to java.xml.bind;
     exports meow.starlight.metadata.ui;
     exports meow.starlight.metadata;
 }

@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.*;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.XMLData;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlDataTypes.MARCRecord;
+import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlDataTypesAdapter.MARCAdapter;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -17,6 +18,8 @@ import java.util.List;
 @SuperBuilder
 
 @XmlAccessorType( XmlAccessType.FIELD )
+@XmlJavaTypeAdapter(MARCAdapter.class)
+@XmlRootElement(name = "mets:xmlData")
 public class MARCXMLData extends XMLData {
 
     @XmlElementWrapper(name = "marc:collection")

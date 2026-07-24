@@ -19,16 +19,16 @@ public class MIX {
 // mix has a specific scheme defined here.
 // if both .tif and .jpg exists, it would be favorable to get the metadata from the .jpg files
 // as it is more abundant there for some reason
-    Map<Tag, String> exifMD;
+    Map<String, String> exifMD;
 
-    public static String get(Map<Tag, String> exif, String tag) {
+    public static String get(Map<String, String> exif, String tag) {
         return exif
                 .entrySet()
                 .stream()
-                .filter(entry -> tag.equals(entry.getKey().toString()))
+                .filter(entry -> entry.getKey().equals(tag))
                 .map(Map.Entry::getValue)
                 .findFirst()
-                .get();
+                .orElse("");
 
     }
 

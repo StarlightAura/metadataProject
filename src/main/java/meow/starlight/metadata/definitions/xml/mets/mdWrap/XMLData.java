@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.*;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlData.MARCXMLData;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlData.MIXXMLData;
+import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlData.RIGHTSXMLData;
 
 import javax.xml.bind.annotation.*;
 
@@ -15,7 +16,6 @@ import javax.xml.bind.annotation.*;
 @SuperBuilder(toBuilder = true)
 
 //@XmlAccessorType( XmlAccessType.FIELD )
-@XmlSeeAlso({MARCXMLData.class, MIXXMLData.class})
-
+@XmlSeeAlso({MARCXMLData.class, MIXXMLData.class, RIGHTSXMLData.class})
 public class XMLData {
 }

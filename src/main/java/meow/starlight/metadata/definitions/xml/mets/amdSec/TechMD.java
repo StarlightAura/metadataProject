@@ -19,8 +19,7 @@ import javax.xml.bind.annotation.XmlElement;
 public class TechMD {
 
     @XmlAttribute(name = "ID")
-    private String id; //TODO: make this attribute get its ID at runtime from the file
-    //"TMD_MIX_" + id
+    private String id;
 
     @XmlElement(name = "mets:mdWrap")
     private MDWrap mdWrap;

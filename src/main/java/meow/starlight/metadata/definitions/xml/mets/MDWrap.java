@@ -21,6 +21,6 @@ public class MDWrap {
     @XmlAttribute(name = "OTHERMDTYPE")
     private String otherMDType;
 
-    @XmlElement(name = "mets:xmlData")
+    @XmlElementRef(name = "mets:xmlData")
     private XMLData XMLData;
 }

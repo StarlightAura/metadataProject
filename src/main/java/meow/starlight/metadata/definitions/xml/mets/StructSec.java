@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlElement;
 public class StructSec {
 
     @XmlAttribute(name = "ID")
-    private String id;
+    final private String id = "STRUCT1";
 
     @XmlElement(name = "mets:structMap")
     private StructMap structMap;

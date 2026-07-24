@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlElement;
 public class ObjectIdentifier {
 
     @XmlElement(name = "mix:objectIdentifierType")
-   final private String mixObjectIdentifierType = "pathname";
+    final private String mixObjectIdentifierType = "pathname";
 
     @XmlElement(name = "mix:objectIdentifierValue")
     private String mixObjectIdentifierValue;

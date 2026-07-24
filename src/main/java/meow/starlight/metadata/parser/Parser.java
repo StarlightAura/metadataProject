@@ -1,5 +1,7 @@
 package meow.starlight.metadata.parser;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import com.thebuzzmedia.exiftool.ExifTool;
@@ -10,6 +12,7 @@ import lombok.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.*;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,11 +32,10 @@ public class Parser {
     public static final String COMMA_DELIMITER = ",";
 
     //this should be changed to be relative to the jar in the final build
-    final ExifTool exifTool = new ExifToolBuilder().withPath("src/main/resources/lib/exiftool/exiftool").build();
+    public final ExifTool exifTool = new ExifToolBuilder().withPath("src/main/resources/lib/exiftool/exiftool").build();
     private static final String EXIFJSON = "-j";
-
-
-
+    final Type mapType = new TypeToken<List<Map<String, String>>>(){}.getType();
+    public static final Gson gson = new Gson();
     /*
     public void parseImageMetadata(String path){
         try (Stream<Path> paths = Files.walk( Paths.get( path ) )) {
@@ -59,16 +61,22 @@ public class Parser {
     //this SHOULD return a map
     //this works. i don't know why this works. it works.
     //don't touch it unless explicitly required.
-    public Map<Tag, String> parseImageMetadata(String path){
+    public Map<String, String> parseImageMetadata(String path){
         var ref = new Object() {
-            Map<Tag, String> metadata = new HashMap<>();
+            Map<String, String> metadata = new HashMap<>();
         };
         try (Stream<Path> paths = Files.walk(Paths.get(path))){
             paths.filter(Files::isRegularFile)
                     .forEach(file -> {
                                 try {
-                                    System.out.println(exifTool.getImageMeta(file.toFile()).toString());
-                                    ref.metadata = exifTool.getImageMeta(file.toFile());
+                                    List<String> args = new ArrayList<>();
+                                    args.add(EXIFJSON);
+                                    args.add(String.valueOf(file));
+                                    String jMetadata = exifTool.getRawExifToolOutput(args);
+                                    Map<String, String> elMapa = orderJsonMetadata(jMetadata);
+
+                                    //System.out.println(exifTool.getImageMeta(file.toFile()).toString());
+                                    ref.metadata = elMapa;
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -78,6 +86,30 @@ public class Parser {
             throw new RuntimeException(e);
         }
         return ref.metadata;
+    }
+
+    public static Map<String, String> orderJsonMetadata(String jsonInput) {
+        Type listType = new com.google.gson.reflect.TypeToken<List<Map<String, String>>>() {
+        }.getType();
+
+        //@SuppressWarnings("unchecked")
+        List<Map<String, String>> metadataList = gson.fromJson(jsonInput, listType);
+
+        Map<String, String> finalMetadataMap = null;
+        if (!metadataList.isEmpty()) {
+            // Assuming the desired map is the first element in the array:
+            finalMetadataMap = metadataList.get(0);
+
+            //todo: replace with log
+            //System.out.println("Successfully parsed " + finalMetadataMap.size() + " key-value pairs into a Map.");
+
+            // Example of accessing an element (e.g., ImageWidth)
+            //Object width = finalMetadataMap.get("ImageWidth");
+            //System.out.println("Example Field (ImageWidth): " + width);
+        } else {
+            System.out.println("Error: Failed to parse the JSON or the list is empty.");
+        }
+        return finalMetadataMap;
     }
 
     //this is. definitely something.
@@ -131,7 +163,40 @@ public class Parser {
             throw new RuntimeException(e);
         }
         System.out.println(accessRecords);
+    }
 
+    public void parseNewAccessData(String path){
+        List<NewAccessData> newAccessRecords = new ArrayList<>();
+        try(CSVReader csvReader = new CSVReader(new FileReader(path));){
+            while(csvReader.readNext() != null){
+                String[] values = null;
+                while ((values = csvReader.readNext()) != null) {
+                    newAccessRecords.add(NewAccessData.builder()
+                            .signatura(values[0])
+                            .titulo(values[1])
+                            .alcanceYContenido(values[2])
+                            .fecha(values[3])
+                            .nombreProductor(values[4])
+                            .nivelDescripcion(values[5])
+                            .tipoDescripcion(values[6])
+                            .volumenYSoporte(values[7])
+                            .notes(values[8])
+                            .observaciones(values[9])
+                            .notaArchivero(values[10])
+                            .tecnica(values[11])
+                            .autor(values[12])
+                            .autor(values[13])
+                            .conservacion(values[14])
+                            .fechaIngreso(values[15])
+                            .formaIngreso(values[16])
+                            .numRegistro(values[17])
+                            .ID(values[18])
+                            .build());
+                }
+            }
+        } catch (IOException | CsvValidationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //we're gonna have to make some asumptions bc otherwise this project won't ever end.

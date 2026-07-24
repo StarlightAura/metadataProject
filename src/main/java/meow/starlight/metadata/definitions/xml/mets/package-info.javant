@@ -1,0 +1,18 @@
+@XmlJavaTypeAdapters({
+        @XmlJavaTypeAdapter(value = MARCAdapter.class, type = MARCXMLData.class),
+        @XmlJavaTypeAdapter(value = MIXAdapter.class, type = MIXXMLData.class),
+        @XmlJavaTypeAdapter(value = RIGHTSAdapter.class, type = RIGHTSXMLData.class),
+})
+
+package meow.starlight.metadata.definitions.xml.mets;
+
+import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlData.MARCXMLData;
+import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlData.MIXXMLData;
+import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlData.RIGHTSXMLData;
+import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlDataTypesAdapter.MARCAdapter;
+import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlDataTypesAdapter.MIXAdapter;
+import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlDataTypesAdapter.RIGHTSAdapter;
+
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters;
+

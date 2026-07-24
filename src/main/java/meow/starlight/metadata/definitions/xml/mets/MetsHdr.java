@@ -22,7 +22,7 @@ import java.time.format.DateTimeFormatter;
 public class MetsHdr {
 
     @XmlAttribute(name = "CREATEDATE")
-    private String createDate = OffsetDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+    final private String createDate = OffsetDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
     @XmlAttribute(name = "RECORDSTATUS")
     final private String recordStatus = "Complete";

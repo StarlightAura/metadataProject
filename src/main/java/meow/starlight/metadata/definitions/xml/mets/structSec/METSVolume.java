@@ -22,5 +22,5 @@ public class METSVolume {
     final private String type = "VOLUME";
 
     @XmlElement(name = "mets:div")
-    private List<METSPage> metsPage;
+    private List<METSPage> metsPages;
 }

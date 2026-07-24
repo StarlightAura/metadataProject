@@ -22,7 +22,7 @@ public class BasicDigitalObjectInformation {
     private ObjectIdentifier objectIdentifier;
 
     @XmlElement(name = "mix:fileSize")
-    private int fileSize;
+    private long fileSize;
 
     @XmlElement(name = "mix:FormatDesignation")
     private FormatDesignation formatDesignation;
