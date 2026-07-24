@@ -113,6 +113,7 @@ public class Parser {
     }
 
     //this is. definitely something.
+    /*
     public void parseAccessData(String path){
 
         /*
@@ -126,10 +127,11 @@ public class Parser {
             throw new RuntimeException(e);
         }
         records.forEach(System.out::println);
-         */
+         
 
 
         /// todo: change this to use newAccessData
+
         List<AccessData> accessRecords = new ArrayList<>();
         try(CSVReader csvReader = new CSVReader(new FileReader(path));){
             while(csvReader.readNext() != null){
@@ -164,8 +166,9 @@ public class Parser {
         }
         System.out.println(accessRecords);
     }
+    */
 
-    public void parseNewAccessData(String path){
+    public static List<NewAccessData> parseNewAccessData(String path){
         List<NewAccessData> newAccessRecords = new ArrayList<>();
         try(CSVReader csvReader = new CSVReader(new FileReader(path));){
             while(csvReader.readNext() != null){
@@ -197,6 +200,7 @@ public class Parser {
         } catch (IOException | CsvValidationException e) {
             throw new RuntimeException(e);
         }
+        return newAccessRecords;
     }
 
     //we're gonna have to make some asumptions bc otherwise this project won't ever end.

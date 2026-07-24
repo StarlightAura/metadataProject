@@ -35,7 +35,7 @@ public class NewAccessData {
 
     private String tecnica; // unused? i can't find anywhere it fits
 
-    private String autor; // essential for marc
+    private String autor; // essential for marc field 100. AUTHOR OF ORIGINAL PIECE
 
     private String conservacion; // unused. legacy
 

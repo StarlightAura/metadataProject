@@ -2,13 +2,13 @@ package meow.starlight.metadata.parser;
 
 import meow.starlight.metadata.builder.METSBuilder;
 import meow.starlight.metadata.definitions.xml.XMLMETS;
-import meow.starlight.metadata.definitions.xml.mets.AmdSec;
-import meow.starlight.metadata.definitions.xml.mets.FileSec;
-import meow.starlight.metadata.definitions.xml.mets.StructSec;
+import meow.starlight.metadata.definitions.xml.mets.*;
 import meow.starlight.metadata.definitions.xml.mets.amdSec.RightsMD;
 import meow.starlight.metadata.definitions.xml.mets.amdSec.TechMD;
 import meow.starlight.metadata.definitions.xml.mets.fileSec.FileGrp;
 import meow.starlight.metadata.definitions.xml.mets.fileSec.METSFile;
+import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlData.MARCXMLData;
+import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlDataTypes.MARCRecord;
 import meow.starlight.metadata.definitions.xml.mets.structSec.METSPage;
 import meow.starlight.metadata.definitions.xml.mets.structSec.METSVolume;
 import meow.starlight.metadata.definitions.xml.mets.structSec.StructMap;
@@ -27,8 +27,15 @@ public class DirectoryProcessor {
      * Processes files from specific subdirectories within a list of root paths.
      * @param parentDirectories List of root directories to process.
      */
-    public void processDirectories(List<Path> parentDirectories) {
+    public void processDirectories(List<Path> parentDirectories, List<NewAccessData> csvData) {
         for (Path parentDir : parentDirectories) {
+            List<TechMD> techMDList = new ArrayList<>();
+            List<RightsMD> rightsMDList = new ArrayList<>();
+            List<METSFile> jpgMetsFileList = new ArrayList<>();
+            List<METSFile> tifMetsFileList = new ArrayList<>();
+            List<METSPage> metsPageList = new ArrayList<>();
+            List<MARCRecord> marcRecords = new ArrayList<>();
+
             System.out.println("========================================");
             System.out.println("Processing Parent Directory: " + parentDir.toString());
 
@@ -37,10 +44,50 @@ public class DirectoryProcessor {
 
             for (Path targetDir : targetDirs) {
                 System.out.println("\n--- Processing Subdirectory: " + targetDir.getFileName());
-                //TODO: add logic here to find if a directory has the same signature as one description in the .csv
-                listAndProcessFiles(targetDir, targetDir);
+                listAndProcessFiles(targetDir, targetDir, techMDList, rightsMDList, jpgMetsFileList, tifMetsFileList, metsPageList);
             }
 
+            METSBuilder.processCSV(parentDir, csvData, marcRecords);
+            MDWrap mdWrap = METSBuilder.createMDWrap("MARC", null, MARCXMLData.builder()
+                            .records(marcRecords).build());
+
+            AmdSec amdSec = AmdSec.builder().techMDs(techMDList).rightsMDs(rightsMDList).build();
+
+            FileGrp jpgFileGrp = FileGrp.builder().id("JPG_SCANS").use("scans").files(jpgMetsFileList).build();
+            FileGrp tifFileGrp = FileGrp.builder().id("TIF_SCANS").use("scans").files(tifMetsFileList).build();
+
+            FileSec fileSec = FileSec.builder().fileGrpJPG(jpgFileGrp).fileGrpTIF(tifFileGrp).build();
+
+            METSVolume metsVolume = METSVolume.builder().metsPages(metsPageList).build();
+            StructMap structMap = StructMap.builder().metsVolume(metsVolume).build();
+            StructSec structSec = StructSec.builder().structMap(structMap).build();
+
+            DmdSec dmdSec = DmdSec.builder()
+                    .mdWrap(mdWrap)
+                    .build();
+
+        /*
+        System.out.println("FILEHDR -> " + METSBuilder.createHeader());
+        System.out.println("AMDSEC -> " + amdSec);
+        System.out.println("FILESEC -> " + fileSec);
+        System.out.println("STRUCTSEC -> " + structSec);
+       */
+
+            XMLMETS xmlMETS = XMLMETS.builder()
+                    .metsHdr(METSBuilder.createHeader())
+                    .dmdSec(dmdSec)
+                    .amdSec(amdSec)
+                    .fileSec(fileSec)
+                    .structSec(structSec)
+                    .build();
+            //System.out.println("XMLMETS -> " + xmlMETS);
+
+            try {
+                METSBuilder.mets(xmlMETS, parentDir);
+            } catch (JAXBException e) {
+                System.err.println("Error creating mets file for " + parentDir + ": " + e.getMessage());
+                throw new RuntimeException(e);
+            }
 
         }
     }
@@ -70,14 +117,12 @@ public class DirectoryProcessor {
 
     /**
      * Lists and processes all files within a given subdirectory path.
-     * TODO: this function should be responsible for both the fileSec and structMap logic
      */
-    private void listAndProcessFiles(Path targetDir, Path parentDir) {
-        List<TechMD> techMDList = new ArrayList<>();
-        List<RightsMD> rightsMDList = new ArrayList<>();
-        List<METSFile> jpgMetsFileList = new ArrayList<>();
-        List<METSFile> tifMetsFileList = new ArrayList<>();
-        List<METSPage> metsPageList = new ArrayList<>();
+    private void listAndProcessFiles(Path targetDir, Path parentDir,
+                                     List<TechMD> techMDList, List<RightsMD> rightsMDList,
+                                     List<METSFile> jpgMetsFileList, List<METSFile> tifMetsFileList,
+                                     List<METSPage> metsPageList) {
+
 
         try (Stream<Path> files = Files.list(targetDir)) {
             List<Path> filesToProcess = files
@@ -89,48 +134,13 @@ public class DirectoryProcessor {
 
             // 2. Iterate and process each file individually
             for (Path file : filesToProcess) {
-                //TODO: here should go a function that links each file to the fileSec and structMap
                 parseFile(file, parentDir, techMDList, rightsMDList, jpgMetsFileList, tifMetsFileList, metsPageList);
             }
         } catch (IOException e) {
             System.err.println("Error accessing directory contents for " + targetDir + ": " + e.getMessage());
         }
 
-        System.out.println("TechMD -> " + techMDList);
-        System.out.println("Rights -> " + rightsMDList);
-        AmdSec amdSec = AmdSec.builder().techMDs(techMDList).rightsMDs(rightsMDList).build();
 
-        FileGrp jpgFileGrp = FileGrp.builder().id("JPG_SCANS").use("scans").files(jpgMetsFileList).build();
-        FileGrp tifFileGrp = FileGrp.builder().id("TIF_SCANS").use("scans").files(tifMetsFileList).build();
-
-        FileSec fileSec = FileSec.builder().fileGrpJPG(jpgFileGrp).fileGrpTIF(tifFileGrp).build();
-
-        METSVolume metsVolume = METSVolume.builder().metsPages(metsPageList).build();
-        StructMap structMap = StructMap.builder().metsVolume(metsVolume).build();
-        StructSec structSec = StructSec.builder().structMap(structMap).build();
-
-        /*
-        System.out.println("FILEHDR -> " + METSBuilder.createHeader());
-        System.out.println("AMDSEC -> " + amdSec);
-        System.out.println("FILESEC -> " + fileSec);
-        System.out.println("STRUCTSEC -> " + structSec);
-       */
-
-        XMLMETS xmlMETS = XMLMETS.builder()
-                .metsHdr(METSBuilder.createHeader())
-                //.dmdSec(dmdSec)
-                .amdSec(amdSec)
-                .fileSec(fileSec)
-                .structSec(structSec)
-                .build();
-        System.out.println("XMLMETS -> " + xmlMETS);
-
-        try {
-            METSBuilder.mets(xmlMETS);
-        } catch (JAXBException e) {
-            System.err.println("Error creating mets file for " + targetDir + ": " + e.getMessage());
-            throw new RuntimeException(e);
-        }
     }
 
     /**
@@ -138,7 +148,6 @@ public class DirectoryProcessor {
      */
 
 
-    /// TODO: insert parsing logic here to filter out tiffs.
     private void parseFile(Path filePath,Path parentDir,
                            List<TechMD> techMDList, List<RightsMD> rightsMDList,
                            List<METSFile> jpgMetsFileList, List<METSFile> tifMetsFileList,

@@ -38,6 +38,7 @@ import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlDataTypes.XMLRight
 import meow.starlight.metadata.definitions.xml.mets.structSec.FilePointer;
 import meow.starlight.metadata.definitions.xml.mets.structSec.METSPage;
 import meow.starlight.metadata.parser.MIX;
+import meow.starlight.metadata.parser.NewAccessData;
 import meow.starlight.metadata.parser.Parser;
 
 import javax.xml.bind.JAXBContext;
@@ -48,6 +49,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -63,8 +68,8 @@ public class METSBuilder {
 
     static final public Parser parser = Parser.builder().build();
 
-    public static void create(DmdSec dmdsec, AmdSec amdsec, FileSec filesec, StructSec structsec) {
-        XMLMETS mets = XMLMETS.builder()
+    public static XMLMETS create(DmdSec dmdsec, AmdSec amdsec, FileSec filesec, StructSec structsec) {
+        return XMLMETS.builder()
                 .metsHdr(createHeader())
                 .dmdSec(dmdsec)
                 .amdSec(amdsec)
@@ -89,7 +94,74 @@ public class METSBuilder {
 
     ///////////////////////////////////
 
+    public static List<Datafield> createDatafieldList(NewAccessData data){
+        List<Datafield> datafields = new ArrayList<>();
+        String alcance = data.getAlcanceYContenido();
+        String[] listAlcance = alcance.split(";");
+        datafields.add(Datafield.builder().tag("040").ind1(" ").ind2(" ")
+                        .subfield(createSubfield("a", "ES-DFBEGN"))
+                        .subfield(createSubfield("b", "spa"))
+                        .subfield(createSubfield("c", "ES-DFBEGN"))
+                        .subfield(createSubfield("d", "ES-DFPUN"))
+                .build());
+        datafields.add(Datafield.builder().tag("100").ind1("0").ind2(" ")
+                        .subfield(createSubfield("a", data.getAutor()))
+                .build());
+        datafields.add(Datafield.builder().tag("222").ind1(" ").ind2(" ")
+                        .subfield(createSubfield("a", data.getTitulo()))
+                .build());
+        datafields.add(Datafield.builder().tag("300").ind1(" ").ind2(" ")
+                        .subfield(createSubfield("a", listAlcance[0]))
+                        .subfield(createSubfield("b", listAlcance[1]))
+                        .subfield(createSubfield("c", listAlcance[2]))
+                .build());
+        datafields.add(Datafield.builder().tag("336").ind1(" ").ind2(" ")
+                        .subfield(createSubfield("a", "still image"))
+                        .subfield(createSubfield("b", "sti"))
+                        .subfield(createSubfield("2", "rdacontent"))
+                .build());
+        datafields.add(Datafield.builder().tag("337").ind1(" ").ind2(" ")
+                        .subfield(createSubfield("a", "computadora"))
+                        .subfield(createSubfield("b", "c"))
+                        .subfield(createSubfield("2", "rdamedia"))
+                .build());
+        datafields.add(Datafield.builder().tag("338").ind1(" ").ind2(" ")
+                        .subfield(createSubfield("a", "recurso en línea"))
+                        .subfield(createSubfield("b", "cr"))
+                        .subfield(createSubfield("2", "rdacontent"))
+                .build());
+        datafields.add(Datafield.builder().tag("540").ind1(" ").ind2(" ")
+                        .subfield(createSubfield("a", "La copia digital se distribuye bajo licencia CC BY 4.0 que permite compartir y adaptar el material siempre que se mencione la procedencia \"Fuente: Real Instituto y Observatorio de la Armada / Biblioteca Virtual de Defensa"))
+                        .subfield(createSubfield("f","CC-BY"))
+                        .subfield(createSubfield("u","http://creativecommons.org/licenses/by/4.0/"))
+                .build());
+        return datafields;
+    }
 
+    public static Subfield createSubfield(String code, String value){
+        return Subfield.builder().code(code).subfield(value).build();
+    }
+
+    public static List<Controlfield> createControlfieldList(NewAccessData data){
+        List<Controlfield> controlfieldList = new ArrayList<>();
+        String fecha = "";
+
+        if (data != null){
+            fecha = data.getFecha();
+        }
+
+
+        controlfieldList.add(createControlfield("001", "BMDB20250326422"));
+        controlfieldList.add(createControlfield("003", "BMDB"));
+        controlfieldList.add(createControlfield("005", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + ".0"));
+        controlfieldList.add(createControlfield("008", LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd")) + "s" +
+                fecha + "    spa     o  d f      spa  "));
+        return controlfieldList;
+    }
+
+    public static Controlfield createControlfield(String tag, String value){
+        return Controlfield.builder().tag(tag).value(value).build();
+    }
 
     ///////////////////////////////////
 
@@ -226,12 +298,12 @@ public class METSBuilder {
 
 
         MIXXMLData xmlmix = createMIXXMLData(createXMLMIX(filepath, parentdir, metadata));
-        MDWrap techMDWrap = createMDWrap("NISOIMG", "", xmlmix);
+        MDWrap techMDWrap = createMDWrap("NISOIMG", null, xmlmix);
         TechMD techMD = createTechMD("TMD_MIX_" + filename, techMDWrap);
         techMDList.add(techMD);
 
 
-        MDWrap rightsMDWrap = createMDWrap("METSRIGHTS", "", createRIGHTSXMLData());
+        MDWrap rightsMDWrap = createMDWrap("METSRIGHTS", null, createRIGHTSXMLData());
         RightsMD rightsMD = createRightsMD("RMD_RTS_" + filename, rightsMDWrap);
         rightsMDList.add(rightsMD);
 
@@ -244,8 +316,29 @@ public class METSBuilder {
         metsPageList.add(metsPage);
     }
 
+    public static void processCSV(Path parentdir, List<NewAccessData> csvData, List<MARCRecord> records){
+        NewAccessData newAccessData;
+        if (csvData.stream().anyMatch(data -> data.getSignatura().equals(parentdir.getFileName().toString()))) {
+            newAccessData = csvData.stream().filter(data -> data.getSignatura().equals(parentdir.getFileName().toString())).findFirst().get();
 
-    public static void mets(XMLMETS xmlmets) throws JAXBException {
+            records.add(MARCRecord.builder()
+                            .controlfields(createControlfieldList(newAccessData))
+                            .datafields(createDatafieldList(newAccessData))
+                    .build());
+
+
+            System.out.println("FOUND IT");
+        }
+        else {
+            System.out.println("Signatura no encontrada en el archivo .csv");
+            records.add(MARCRecord.builder()
+                            .controlfields(createControlfieldList(null))
+                    .build());
+        }
+
+    }
+
+    public static void mets(XMLMETS xmlmets, Path parentDir) throws JAXBException {
 
 
         JAXBContext jc;
@@ -258,9 +351,9 @@ public class METSBuilder {
         ms = jc.createMarshaller();
         ms.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-        ms.marshal(xmlmets, System.out);
+        //ms.marshal(xmlmets, System.out);
         try {
-            ms.marshal(xmlmets, new FileWriter("mets.xml"));
+            ms.marshal(xmlmets, new FileWriter(parentDir.toString() + "/" + parentDir.getFileName() + ".xml"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

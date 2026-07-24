@@ -19,6 +19,7 @@ import meow.starlight.metadata.definitions.xml.mets.mdWrap.XMLData;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlData.MARCXMLData;
 import meow.starlight.metadata.definitions.xml.mets.mdWrap.xmlDataTypes.MARCRecord;
 import meow.starlight.metadata.parser.DirectoryProcessor;
+import meow.starlight.metadata.parser.NewAccessData;
 import meow.starlight.metadata.parser.Parser;
 
 import javax.xml.bind.JAXBContext;
@@ -29,6 +30,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,6 +49,9 @@ public class Main {
     /// i'd pray for god to help me.
     /// but there is no god.
     public static void main(String[] args) {
+
+        // todo : check if paths exist, if not, log it
+        System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss" + ".0")));
         parse(args);
     }
     /*
@@ -63,6 +69,7 @@ public class Main {
 
     public static void parse(String[] args) {
         File dir = new File(args[0]);
+        List<NewAccessData> csvData = Parser.parseNewAccessData(args[1]);
 
         //parser.parseImageMetadata(args[0]);
         //parser.parseAccessData(args[1]);
@@ -71,7 +78,7 @@ public class Main {
 
         dp.processDirectories(Parser.listDirectories(dir.listFiles()).stream()
                 .map(Paths::get)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList()), csvData);
 
 
     }

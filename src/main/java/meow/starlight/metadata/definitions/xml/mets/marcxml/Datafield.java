@@ -28,5 +28,6 @@ public class Datafield {
     private String ind2;
 
     @XmlElement(name = "marc:subfield")
+    @Singular
     private List<Subfield> subfields;
 }
